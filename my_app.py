@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import nltk_download_utils
+import nltk
+nltk.download('stopwords')
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 import regex as re
@@ -10,6 +11,7 @@ from datasets import load_dataset
 import copy
 from rouge import Rouge
 import random
+
 
 en_stopwords = nltk.corpus.stopwords.words('english')
 stemmer = SnowballStemmer("english")
