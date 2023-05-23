@@ -1,0 +1,9 @@
+streamlit
+pandas
+numpy
+nltk
+regex
+datasets
+copy
+rouge
+random
