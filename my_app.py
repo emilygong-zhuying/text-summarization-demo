@@ -217,8 +217,9 @@ def get_rouge_scores(final_summary, original_text):
 
 
 # The actual app
-dataset = load_dataset("billsum", split = "test")
-dataset = pd.DataFrame(dataset)
+# dataset = load_dataset("billsum", split = "test")
+# dataset = pd.DataFrame(dataset)
+dataset = pd.read_csv("test_sample.csv")
 txt = dataset.iat[0, 0]
 original_summary = dataset.iat[0, 1]
 
