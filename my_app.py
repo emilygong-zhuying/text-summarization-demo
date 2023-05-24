@@ -238,13 +238,14 @@ generated_summary = everything_generate_summary(txt, my_multiplier)
 
 col1, col2 = st.columns(2)
 with col1:
+    st.header("Original `Billsum` dataset:")
     st.write(dataset.head())
     txt = st.text_area('Example text to analyze', txt, height = 200)
     original_summary = st.text_area('Corresponding summary', original_summary, height = 200)
 
 
 with col2:
-    st.header("TF-IDF from scratch :")
+    st.header("TF-IDF from scratch:")
     st.write(generated_summary)
     st.write("Rouge score:", get_rouge_scores(generated_summary, txt))
 
