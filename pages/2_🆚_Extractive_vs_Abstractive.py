@@ -26,7 +26,7 @@ def preprocessing(string):
     Given 1 single str, 
     returns a cleaned sentence
     '''
-    # take our symbols
+    # take out symbols
     string = re.sub(r'\([^)]*\)', '', string)
     string = re.sub('\n', '', string)
     string = re.sub(' +', ' ', string)
