@@ -260,11 +260,22 @@ if st.button('Randomly generate a Bill Example'):
 else:
     pass
 
+column1, column2 = st.columns(2)
+with column1:
+    txt = st.text_area('Text', txt, height = 250)
+with column2:
+    original_summary = st.text_area('Corresponding summary', original_summary, height = 250)
+
+
+
+# txt = st.text_area('Text', txt, height = 250)
+# original_summary = st.text_area('Corresponding summary', original_summary, height = 250)
+
 
 col1, col2, col3 = st.columns(3)
 with col1:
     st.header("TF-IDF from scratch:")
-    my_multiplier = st.slider('Please input a multiplier value:', 1.0, 2.0)
+    my_multiplier = st.slider('Please input a multiplier value:', 1.0, 1.5)
     first_summary = everything_generate_summary(txt, my_multiplier)
     st.write("#### Summary:")
     st.write(first_summary)
