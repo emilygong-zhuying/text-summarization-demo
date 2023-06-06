@@ -23,14 +23,17 @@ st.cache(show_spinner=False)
 def load_model():
     #model_name = 'google/pegasus-large'
     model_name = 'google/pegasus-billsum'
-    path = 'content/'
     torch_device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    tokenizer = PegasusTokenizer.from_pretrained(path+'local_pegasus-billsum_tokenizer')
-    model = PegasusForConditionalGeneration.from_pretrained(path+"local_pegasus-billsum_tokenizer_model", max_position_embeddings=2000).to(torch_device)
+    #run using local model
+    #tokenizer = PegasusTokenizer.from_pretrained(model_name)
+    #model = PegasusForConditionalGeneration.from_pretrained(model_name, max_position_embeddings=2000).to(torch_device)
+    tokenizer = PegasusTokenizer.from_pretrained("local_pegasus-billsum_tokenizer")
+    model = PegasusForConditionalGeneration.from_pretrained("local_pegasus-billsum_tokenizer_model", max_position_embeddings=2000).to(torch_device)
     return model,tokenizer
 
 model,tokenizer = load_model()
 
+#run this the first time and use the local model for faster runtime
 #tokenizer.save_pretrained("local_pegasus-billsum_tokenizer")
 #model.save_pretrained("local_pegasus-billsum_tokenizer_model")
 
@@ -46,6 +49,7 @@ def preprocessing(string):
     # take out symbols
     string = re.sub(r'\([^)]*\)', '', string)
     string = re.sub('\n', '', string)
+    string = re.sub('<n>', '', string)
     string = re.sub(' +', ' ', string)
     string = re.sub(r'[^\w\s\.\,]', '', string)
     string = re.sub('\.(?!\s|\d|$)', '. ', string)
@@ -308,11 +312,15 @@ with col2:
 
 with col3:
     st.header("Abstractive summary:")
-    txt_pre = preprocessing(txt)
-    txt_cleaned = delete_leading_white_spaces(txt_pre)
+    min_l = st.slider('Please input a a minimum length (words) for the summary:', 1, 50, step=1,value=20)
     if(st.button("Generate")):
+        txt_pre = preprocessing(txt)
+        txt_cleaned = delete_leading_white_spaces(txt_pre)
         batch = tokenizer.prepare_seq2seq_batch(txt_cleaned, truncation=True, padding='longest',return_tensors='pt')
-        translated = model.generate(**batch,min_length=20, max_new_tokens = 50)
+        translated = model.generate(**batch,min_length=min_l, max_new_tokens = 100)
         abs_summary = tokenizer.batch_decode(translated, skip_special_tokens=True)
-        st.text_area('Summary: ', abs_summary, height = 400)
-        st.write("Rouge score:", get_rouge_scores(abs_summary, txt))
+        st.write("#### Summary:")
+        st.write (abs_summary[0], height = 400, placeholder="Abstractive Summary", unsafe_allow_html=True)
+        st.write("#### Rouge score:", get_rouge_scores(abs_summary[0], txt))
+    else:
+        pass
