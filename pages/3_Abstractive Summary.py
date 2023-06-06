@@ -7,8 +7,10 @@ st.cache(show_spinner=False)
 def load_model():
     model_name = 'google/pegasus-large'
     torch_device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    tokenizer = PegasusTokenizer.from_pretrained(model_name, use_auth_token=True)
-    model = PegasusForConditionalGeneration.from_pretrained(model_name, max_position_embeddings=2000, use_auth_token=True).to(torch_device)
+    tokenizer = PegasusTokenizer.from_pretrained(model_name)
+    model = PegasusForConditionalGeneration.from_pretrained(model_name, max_position_embeddings=2000).to(torch_device)
+    #tokenizer = PegasusTokenizer.from_pretrained(model_name, use_auth_token=True)
+    #model = PegasusForConditionalGeneration.from_pretrained(model_name, max_position_embeddings=2000, use_auth_token=True).to(torch_device)
     #run using local model
     #tokenizer = PegasusTokenizer.from_pretrained(local_pegasus-large_tokenizer)
     #model = PegasusForConditionalGeneration.from_pretrained(local_pegasus-large_tokenizer_model, max_position_embeddings=2000).to(torch_device)
