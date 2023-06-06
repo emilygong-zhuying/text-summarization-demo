@@ -3,8 +3,8 @@ import pandas as pd
 import numpy as np
 import nltk
 #Download for first time
-#nltk.download('stopwords')
-#nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('punkt')
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 import regex as re
@@ -25,12 +25,12 @@ def load_model():
     model_name = 'google/pegasus-billsum'
     torch_device = 'cuda' if torch.cuda.is_available() else 'cpu'
     #run using local model
-    #tokenizer = PegasusTokenizer.from_pretrained(model_name)
-    #model = PegasusForConditionalGeneration.from_pretrained(model_name, max_position_embeddings=2000).to(torch_device)
+    tokenizer = PegasusTokenizer.from_pretrained(model_name)
+    model = PegasusForConditionalGeneration.from_pretrained(model_name, max_position_embeddings=2000).to(torch_device)
     #tokenizer = PegasusTokenizer.from_pretrained("local_pegasus-billsum_tokenizer", use_auth_token=True)
     #model = PegasusForConditionalGeneration.from_pretrained("local_pegasus-billsum_tokenizer_model", max_position_embeddings=2000, use_auth_token=True).to(torch_device)
-    tokenizer = PegasusTokenizer.from_pretrained("local_pegasus-billsum_tokenizer")
-    model = PegasusForConditionalGeneration.from_pretrained("local_pegasus-billsum_tokenizer_model", max_position_embeddings=2000).to(torch_device)
+    #tokenizer = PegasusTokenizer.from_pretrained("local_pegasus-billsum_tokenizer")
+    #model = PegasusForConditionalGeneration.from_pretrained("local_pegasus-billsum_tokenizer_model", max_position_embeddings=2000).to(torch_device)
     return model,tokenizer
 
 model,tokenizer = load_model()
