@@ -2,8 +2,9 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import nltk
-nltk.download('stopwords')
-nltk.download('punkt')
+#Download for first time
+#nltk.download('stopwords')
+#nltk.download('punkt')
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 import regex as re
@@ -15,7 +16,23 @@ import random
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 from heapq import nlargest
+from transformers import PegasusForConditionalGeneration, PegasusTokenizer
+import torch
 
+st.cache(show_spinner=False)
+def load_model():
+    #model_name = 'google/pegasus-large'
+    model_name = 'google/pegasus-billsum'
+    path = 'content/'
+    torch_device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    tokenizer = PegasusTokenizer.from_pretrained(path+'local_pegasus-billsum_tokenizer')
+    model = PegasusForConditionalGeneration.from_pretrained(path+"local_pegasus-billsum_tokenizer_model", max_position_embeddings=2000).to(torch_device)
+    return model,tokenizer
+
+model,tokenizer = load_model()
+
+#tokenizer.save_pretrained("local_pegasus-billsum_tokenizer")
+#model.save_pretrained("local_pegasus-billsum_tokenizer_model")
 
 
 en_stopwords = nltk.corpus.stopwords.words('english')
@@ -291,5 +308,11 @@ with col2:
 
 with col3:
     st.header("Abstractive summary:")
-    st.write("coming soon...")
-    # st.write("Rouge score:", get_rouge_scores(summary, txt))
+    txt_pre = preprocessing(txt)
+    txt_cleaned = delete_leading_white_spaces(txt_pre)
+    if(st.button("Generate")):
+        batch = tokenizer.prepare_seq2seq_batch(txt_cleaned, truncation=True, padding='longest',return_tensors='pt')
+        translated = model.generate(**batch,min_length=20, max_new_tokens = 50)
+        abs_summary = tokenizer.batch_decode(translated, skip_special_tokens=True)
+        st.text_area('Summary: ', abs_summary, height = 400)
+        st.write("Rouge score:", get_rouge_scores(abs_summary, txt))
