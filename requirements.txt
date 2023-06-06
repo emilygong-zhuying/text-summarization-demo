@@ -9,3 +9,4 @@ torch==2.0.1
 torchaudio==2.0.2
 transformers==4.29.2
 sentencepiece==0.1.99
+huggingface-hub==0.15.1
