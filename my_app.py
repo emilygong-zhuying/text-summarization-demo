@@ -18,6 +18,6 @@ the *extractive summarization* method directly extracts information from the ori
 method employs abstraction to produce a high level summary similar to humans'.
 ''')
 st.markdown("## Feel free to visit the tabs on the left to learn more")
-st.markdown('Find us on [GitHub](https://github.com/the-data-science-union/DSU-S2023-Text-Summarization) or [Medium](https://www.google.com)')
+st.markdown('Find us on [GitHub](https://github.com/the-data-science-union/DSU-S2023-Text-Summarization) or [Medium](https://medium.com/@ucladsu/text-summarization-42a4e31b453f)')
 
 st.balloons()
